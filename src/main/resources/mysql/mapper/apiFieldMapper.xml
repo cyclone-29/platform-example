@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.posinda.mysql.repo.ApiFieldRepo">
+
+    <select id="get" resultType="cn.posinda.mysql.entity.ApiField">
+        SELECT * FROM TBL_API_FIELD WHERE ID = #{id}
+    </select>
+
+    <select id="findList" resultType="cn.posinda.mysql.entity.ApiField">
+        SELECT * FROM TBL_API_FIELD
+        <where>
+            <if test="apiUrl!=null">API_URL = #{apiUrl}</if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        DELETE FROM TBL_API_FIELD WHERE ID = #{id}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO TBL_API_FIELD VALUES (#{id},#{fieldName},#{apiUrl},#{description})
+    </insert>
+</mapper>

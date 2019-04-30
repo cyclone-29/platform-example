@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.posinda.mysql.repo.InterceptorFieldRepo">
+
+   <select id="get" resultType="cn.posinda.mysql.entity.InterceptorField">
+       SELECT * FROM TBL_INTERCEPTOR_FIELD WHERE ID = #{id}
+   </select>
+
+    <select id="findList" resultType="cn.posinda.mysql.entity.InterceptorField">
+        SELECT * FROM TBL_INTERCEPTOR_FIELD
+        <where>
+            DEL_FLAG = 0
+            <if test="apiUrl!=null"> AND API_URL = #{apiUrl}</if>
+            <if test="keyName!=null"> AND KEY_NAME = #{keyName}</if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        UPDATE TBL_INTERCEPTOR_FIELD
+        <set>
+            DEL_FLAG = 1
+            <if test="updateDt!=null">, UPDATE_DT = #{updateDt}</if>
+        </set>
+        WHERE ID = #{id}
+    </delete>
+
+    <update id="update">
+        UPDATE TBL_INTERCEPTOR_FIELD
+        <set>
+            UPDATE_DT = #{updateDt}
+            <if test="interceptorType!=null">, INTERCEPTOR_TYPE = #{interceptorType}</if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO TBL_INTERCEPTOR_FIELD VALUES (#{id},#{apiUrl},#{fieldName},#{keyName},#{createDt},NULL,#{interceptorType},0)
+    </insert>
+    
+    <select id="getAllByApiUrlAndKeyName" resultType="cn.posinda.mysql.entity.InterceptorField">
+        SELECT * FROM TBL_INTERCEPTOR_FIELD WHERE DEL_FLAG = 0 AND API_URL = #{apiUrl} AND KEY_NAME = #{keyName}
+    </select>
+</mapper>

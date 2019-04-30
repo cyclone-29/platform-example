@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.posinda.phoenix.job.importConcerned.repo.ImportFailureRepo">
+
+    <select id="get" resultType="cn.posinda.phoenix.job.importConcerned.entity.ImportFailure">
+        SELECT * FROM TBL_IMPORT_FAILURE WHERE ID = #{id}
+    </select>
+
+    <select id="findList" resultType="cn.posinda.phoenix.job.importConcerned.entity.ImportFailure">
+        SELECT * FROM TBL_IMPORT_FAILURE
+    </select>
+    
+    <delete id="deleteAllByTableName">
+        DELETE FROM TBL_IMPORT_FAILURE WHERE BG_TABLE_NAME = #{tableName}
+    </delete>
+</mapper>

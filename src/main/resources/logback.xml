@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>logback</contextName>
+    <property name="log.path" value="/var/platform/spring/logs"/>
+    <property name="databaseConnectionErrorLog.path" value="/var/platform/spring/databaseConnectionError"/>
+    <property name="interfaceConnectionErrorLog.path" value="/var/platform/spring/interfaceConnectionError"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/spring.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="databaseConnectionError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${databaseConnectionErrorLog.path}/databaseConnectionError.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="interfaceConnectionError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${interfaceConnectionErrorLog.path}/interfaceConnectionError.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </root>
+
+    <!--接口连接状况检查定时任务30分钟运行一次,在两次运行期间可能发生连接异常情况，单独处理，输出到日志并录入数据库-->
+    <logger name="cn.posinda.phoenix.controller.Accident8XController" level="ERROR" additivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="interfaceConnectionError"/>
+    </logger>
+
+    <!--接口连接状况检查定时任务30分钟运行一次，如果检查到连接异常，输出到日志并录入数据库-->
+    <logger name="cn.posinda.mysql.job.InterfaceConnectionMonitor" level="ERROR" additivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="interfaceConnectionError"/>
+    </logger>
+
+    <!--数据库连接监控，定时任务30分钟运行一次，如果检查到连接异常，输出到日志并录入数据库-->
+    <logger name="cn.posinda.phoenix.job.importConcerned.Monitor" level="ERROR" additivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="databaseConnectionError"/>
+    </logger>
+
+
+</configuration>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.posinda.phoenix.repo.TableInfoRepo">
+    
+    <select id="get" parameterType="cn.posinda.phoenix.entity.TableInfo" resultType="cn.posinda.phoenix.entity.TableInfo">
+        select * from TBL_TABLE_INFO WHERE tableName = #{tableName}
+    </select>
+    
+    <insert id="insert">
+        upsert INTO TBL_TABLE_INFO values(#{tableName},#{recordCount},#{description},#{systemFrom},#{url})
+    </insert>
+    
+    <update id="updateDescription">
+        upsert into TBL_TABLE_INFO(tableName,description) VALUES (#{tableName},#{description})
+    </update>
+
+    <update id="updateRowNum">
+        upsert into TBL_TABLE_INFO(tableName,recordCount) VALUES (#{tableName},#{recordCount})
+    </update>
+    
+    <select id="findList" resultType="cn.posinda.phoenix.entity.TableInfo">
+        select * from TBL_TABLE_INFO
+    </select>
+    
+    <select id="getAllTableNames" resultType="java.lang.String">
+        select tableName FROM TBL_TABLE_INFO
+    </select>
+
+    <select id="getRowSumOfAllTables" resultType="java.lang.Long">
+        select sum(recordCount) FROM TBL_TABLE_INFO
+    </select>
+
+</mapper>
